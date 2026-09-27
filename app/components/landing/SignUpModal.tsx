@@ -35,10 +35,9 @@ export default function SignUpModal({
   return (
     <section className="fixed inset-0 z-50 flex items-center justify-center bg-black/75">
       <div className="relative w-full max-w-[400px] overflow-hidden rounded bg-white shadow-lg">
-        {" "}
         <button
           onClick={onClose}
-          className="absolute right-4 top-2 text-3xl text-black"
+          className="cursor-pointer absolute right-4 top-2 text-3xl text-black"
         >
           ×
         </button>

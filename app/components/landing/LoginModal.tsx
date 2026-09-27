@@ -41,7 +41,7 @@ export default function LoginModal({
       <div className="relative w-full max-w-[400px] rounded bg-white">
         <button
           onClick={onClose}
-          className="absolute right-4 top-2 text-3xl text-black"
+          className="cursor-pointer absolute right-4 top-2 text-3xl text-black"
         >
           ×
         </button>
@@ -105,7 +105,7 @@ export default function LoginModal({
 
           <button
             onClick={handleLogin}
-            className=" transition-colors duration-200 hover:bg-[#20ba68] cursor-pointer mb-3.75 flex h-10 items-center justify-center rounded bg-[#2bd97c] text-[#032b41]"
+            className="mb-3.75 flex h-10 w-full transition-colors duration-200 hover:bg-[#20ba68] cursor-pointer mb-3.75 flex h-10 items-center justify-center rounded bg-[#2bd97c] text-[#032b41]"
           >
             Login
           </button>
