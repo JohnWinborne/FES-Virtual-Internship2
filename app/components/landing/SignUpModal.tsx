@@ -1,18 +1,43 @@
 import google from "../../assets/google.png";
-// import { useState } from "react";
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../lib/firebase";
 
-export default function SignUpModal({ onLoginClick, onClose }: { onLoginClick: () => void, onClose: () => void }) {
-  // const [error, setError] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+export default function SignUpModal({
+  onLoginClick,
+  onClose,
+}: {
+  onLoginClick: () => void;
+  onClose: () => void;
+}) {
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignUp = async () => {
+    setEmailError("");
+    setPasswordError("");
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      if (error.code === "auth/weak-password") {
+        setPasswordError("Firebase: Error (auth/internal-error).");
+      } else if (error.code === "auth/invalid-email") {
+        setEmailError("Firebase: Error (auth/invalid-email).");
+      } else if (error.code === "auth/email-already-in-use") {
+        setEmailError("Firebase: Error (auth/email-already-in-use).");
+      }
+    }
+  };
 
   return (
     <section className="fixed inset-0 z-50 flex items-center justify-center bg-black/75">
       <div className="relative w-full max-w-[400px] overflow-hidden rounded bg-white shadow-lg">
-        {" "}
         <button
           onClick={onClose}
-          className="absolute right-4 top-2 text-3xl text-black"
+          className="cursor-pointer absolute right-4 top-2 text-3xl text-black"
         >
           ×
         </button>
@@ -33,24 +58,40 @@ export default function SignUpModal({ onLoginClick, onClose }: { onLoginClick: (
           <span className="text-sm font-semibold text-gray-600">or</span>
           <div className="h-px flex-1 bg-gray-300" />
         </div>
+        {emailError && (
+          <p className="mb-8 ml-7 text-sm text-red-500">{emailError}</p>
+        )}
+        {passwordError && (
+          <p className="mb-8 ml-7  text-sm text-red-500">{passwordError}</p>
+        )}
         <div className="mx-8 mb-4">
           <input
             type="text"
             placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="h-10 w-full rounded border-2 border-[#b8c8d3] bg-[#e7f0fc] px-3 text-sm text-[#032b41] outline-none"
           />
         </div>
         <div className="mx-8 mb-4">
           <input
-            type="text"
+            type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="h-10 w-full rounded border-2 border-[#b8c8d3] bg-[#e7f0fc] px-3 text-sm text-[#032b41] outline-none"
           />
         </div>
-        <div className="cursor-pointer transition-colors duration-200 hover:bg-[#20ba68] mx-8 mb-6 flex h-10 items-center justify-center rounded bg-[#2bd97c] text-[#032b41]">
+        <button
+          onClick={handleSignUp}
+          className="mx-8 mb-5 flex h-10 w-[calc(100%-4rem)] cursor-pointer items-center justify-center rounded bg-[#2bd97c] text-[#032b41] transition-colors duration-200 hover:bg-[#20ba68]"
+        >
           Sign up
-        </div>
-        <div onClick={onLoginClick} className=" transition-colors duration-200 hover:bg-[#dfe9e5] flex h-10 items-center justify-center bg-[#f1f6f4] text-sm text-[#4285f4]">
+        </button>
+        <div
+          onClick={onLoginClick}
+          className="cursor-pointer transition-colors duration-200 hover:bg-[#dfe9e5] flex h-10 items-center justify-center bg-[#f1f6f4] text-sm text-[#4285f4]"
+        >
           Already have an account?
         </div>
       </div>
