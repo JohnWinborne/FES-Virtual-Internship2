@@ -9,8 +9,11 @@ import Numbers from "./components/landing/Numbers";
 import Reviews from "./components/landing/Reviews";
 import LoginModal from "./components/landing/LoginModal";
 import SignUpModal from "./components/landing/SignUpModal";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   return (
@@ -24,6 +27,9 @@ export default function Home() {
 
       {showLogin && (
         <LoginModal
+        onGuestClick={() => {
+          router.push("/for-you");
+        }}
           onSignUpClick={() => {
             setShowSignUp(true);
             setShowLogin(false);
