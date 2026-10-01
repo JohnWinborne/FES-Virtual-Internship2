@@ -5,9 +5,11 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 
 export default function LoginModal({
+  onGuestClick,
   onSignUpClick,
   onClose,
 }: {
+  onGuestClick: () => void;
   onSignUpClick: () => void;
   onClose: () => void;
 }) {
@@ -58,7 +60,7 @@ export default function LoginModal({
           <div className="transition-colors duration-200 hover:bg-[#354d91] cursor-pointer relative mb-3.75 flex h-10 items-center rounded bg-[#425da8] text-white">
             <FaUser className=" absolute text-xl text-white ml-2" />
 
-            <div className="flex-1 text-center">Login as a Guest</div>
+            <div onClick={onGuestClick} className="flex-1 text-center">Login as a Guest</div>
           </div>
 
           <div className="mb-3.75 flex items-center gap-6">

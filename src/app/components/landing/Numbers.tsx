@@ -2,7 +2,7 @@ import { BiCrown } from "react-icons/bi";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { RiLeafLine } from "react-icons/ri";
 
-export default function Reviews() {
+export default function Numbers() {
   return (
     <section>
       <div className="w-full py-10">
