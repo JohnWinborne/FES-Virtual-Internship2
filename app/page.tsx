@@ -1,0 +1,75 @@
+"use client";
+
+import { useState } from "react";
+import Features from "./components/landing/Features";
+import Footer from "./components/landing/Footer";
+import Landing from "./components/landing/Landing";
+import Navbar from "./components/landing/Navbar";
+import Numbers from "./components/landing/Numbers";
+import Reviews from "./components/landing/Reviews";
+import LoginModal from "./components/landing/LoginModal";
+import SignUpModal from "./components/landing/SignUpModal";
+import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./lib/firebase";
+
+export default function Home() {
+  const router = useRouter();
+
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
+
+  const handleGuestLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, "guest@gmail.com", "guest123");
+      console.log("logged in as:", auth.currentUser?.email);
+      setShowLogin(false);
+      router.push("/for-you");
+    } catch (error) {
+      console.error("Guest login failed:", error);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setShowLogin(false);
+    setShowSignUp(false);
+    router.push("/for-you");
+  };
+
+  return (
+    <>
+      <Navbar onLoginClick={() => setShowLogin(true)} />
+      <Landing onLoginClick={() => setShowLogin(true)} />
+      <Features />
+      <Reviews onLoginClick={() => setShowLogin(true)} />
+      <Numbers />
+      <Footer />
+
+      {showLogin && (
+        <LoginModal
+          onGuestClick={handleGuestLogin}
+          onSuccess={handleAuthSuccess}
+          onSignUpClick={() => {
+            setShowSignUp(true);
+            setShowLogin(false);
+          }}
+          onClose={() => {
+            setShowLogin(false);
+          }}
+        />
+      )}
+      {showSignUp && (
+        <SignUpModal
+          onSuccess={handleAuthSuccess}
+          onLoginClick={() => {
+            setShowLogin(true);
+            setShowSignUp(false);
+          }}
+          onClose={() => {
+            setShowSignUp(false);
+          }}
+        />
+      )}
+    </>
+  );
+}
