@@ -8,10 +8,12 @@ export default function LoginModal({
   onGuestClick,
   onSignUpClick,
   onClose,
+  onSuccess,
 }: {
   onGuestClick: () => void;
   onSignUpClick: () => void;
   onClose: () => void;
+  onSuccess: () => void;
 }) {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -24,7 +26,7 @@ export default function LoginModal({
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("login ok:", auth.currentUser?.email);
+      onSuccess();
     } catch (error: any) {
       if (error.code === "auth/invalid-email") {
         setEmailError("Firebase: Error (auth/invalid-email).");
@@ -35,9 +37,13 @@ export default function LoginModal({
         error.code === "auth/invalid-credential"
       ) {
         setPasswordError("Firebase: Error (auth/wrong-password).");
+      } else {
+        setPasswordError("Something went wrong. Please try again.");
       }
     }
   };
+
+  
 
   return (
     <section className="fixed inset-0 z-50 flex items-center justify-center bg-black/75">

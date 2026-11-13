@@ -6,9 +6,11 @@ import { auth } from "../../lib/firebase";
 export default function SignUpModal({
   onLoginClick,
   onClose,
+  onSuccess,
 }: {
   onLoginClick: () => void;
   onClose: () => void;
+  onSuccess: () => void;
 }) {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -21,6 +23,7 @@ export default function SignUpModal({
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      onSuccess();
     } catch (error: any) {
       if (error.code === "auth/weak-password") {
         setPasswordError("Firebase: Error (auth/internal-error).");

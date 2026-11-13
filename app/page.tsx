@@ -22,12 +22,18 @@ export default function Home() {
   const handleGuestLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, "guest@gmail.com", "guest123");
-         console.log("logged in as:", auth.currentUser?.email);
+      console.log("logged in as:", auth.currentUser?.email);
       setShowLogin(false);
       router.push("/for-you");
     } catch (error) {
       console.error("Guest login failed:", error);
     }
+  };
+
+  const handleAuthSuccess = () => {
+    setShowLogin(false);
+    setShowSignUp(false);
+    router.push("/for-you");
   };
 
   return (
@@ -42,6 +48,7 @@ export default function Home() {
       {showLogin && (
         <LoginModal
           onGuestClick={handleGuestLogin}
+          onSuccess={handleAuthSuccess}
           onSignUpClick={() => {
             setShowSignUp(true);
             setShowLogin(false);
@@ -53,6 +60,7 @@ export default function Home() {
       )}
       {showSignUp && (
         <SignUpModal
+          onSuccess={handleAuthSuccess}
           onLoginClick={() => {
             setShowLogin(true);
             setShowSignUp(false);
